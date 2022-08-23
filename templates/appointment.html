@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Appointments
+{% endblock %}
+
+
+
+{% block body %}
+<h1><a href = "/">Home</a></h1>
+<h1>Pending Appointments:</h1>
+<table>
+    <tr>
+        <th>AppID</th>
+        <th>Service</th>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for appoint in appointments %}
+    <tr>
+        <td>{{appoint['appid']}}</td>
+        <td>{{appoint['service']}}</td>
+        <td>{{appoint['name']}}</td>
+        <td>{{appoint['phone']}}</td>
+        <td>{{appoint['email']}}</td>
+        <td>{{appoint['timedate']}}</td>
+        <td>
+            <form action = "/appoint" method = "POST">
+                <input type = "hidden" name = "accept" value = "{{appoint['appid']}}">
+                <button type = "submit">Accept</button>
+            </form>
+
+            <form action = "/appoint" method = "POST">
+                <input type = "hidden" name = "reject" value = "{{appoint['appid']}}">
+                <button type = "submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Appointments</h1>
+
+<input type = "radio" id = "all" name = "view" value = "*" checked onclick = "check()"> All
+<input type = "radio" id = "pend" name = "view" value = "0" onclick = "check()"> Pending
+<input type = "radio" id = "yes" name = "view" value = "1" onclick = "check()"> Approve
+<input type = "radio" id = "no" name = "view" value = "2" onclick = "check()"> Rejected
+
+<br>
+
+<div id = "table">
+    <table>
+        <tr>
+            <th>AppId</th>
+            <th>Service</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for appoint in app2 %}
+        <tr>
+            <td>{{appoint['appid']}}</td>
+            <td>{{appoint['service']}}</td>
+            <td>{{appoint['name']}}</td>
+            <td>{{appoint['phone']}}</td>
+            <td>{{appoint['email']}}</td>
+            <td>{{appoint['timedate']}}</td>
+            <td>
+
+                {% set status = appoint['status']  %}
+
+                {% if status == 0 %}
+                Pending
+                {% elif status == 1 %}
+                Approve
+                {% else %}
+                Rejected
+                {% endif %}
+
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script defer>
+    function check(){
+
+        var view = document.querySelector('input[name="view"]:checked').value;
+        var param = `select=${view}`
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/view", true);
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+
+        xhr.onload = function (){
+            if (this.status == 200) {
+                data = JSON.parse(this.responseText);
+
+                let output = ""
+
+                output += "<table><tr><th>AppId</th><th>Service</th><th>Name</th><th>Email</th><th>Phone</th><th>Date</th><th>Status</th></tr>"
+
+                for(let i = 0; i < data.length; i++){
+                    output += "<tr>"
+
+                    output += "<td>" + data[i].appid + "</td>"
+                    output += "<td>" + data[i].service + "</td>"
+                    output += "<td>"+ data[i].name + "</td>"
+                    output += "<td>"+ data[i].email + "</td>"
+                    output += "<td>"+ data[i].phone + "</td>"
+                    output += "<td>"+ data[i].timedate + "</td>"
+
+                    var status = data[i].status
+
+                    if(status == 0){
+                        output += "<td>Pending</td>"
+                    } else if (status == 1){
+                        output += "<td>Approve</td>"
+                    } else{
+                        output += "<td>Denied</td>"
+                    }
+
+                    output += "</tr>"
+                }
+                output+= "</table>"
+                document.getElementById("table").innerHTML = output
+            }
+        }
+
+        xhr.send(param)
+    }
+</script>
+{% endblock %}
+

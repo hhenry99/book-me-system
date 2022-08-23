@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel = "stylesheet" href = "../static/style.css">
+{% endblock %}
+
+{% block title %}
+Appointment
+{% endblock %}
+
+{% block body %}
+<div class = "wrapper">
+    <h1> Book An Appointment Today! </h1>
+    <form action = "/book" method = "POST" id = "form">
+        <div class = "mb-3">
+            <label for = "name" class = "form-label">Full Name</label>
+            <input type = "text" class = "form-control" id = "name" name = "name" placeholder = "John Doe">
+        </div>
+
+        <div class = "mb-3">
+            <label for = "email" class = "form-label">Email</label>
+            <input type = "email" class = "form-control" id = "email" name = "email" placeholder = "JohnDoe@gmail.com">
+        </div>
+
+        <div class = "mb-3">
+            <label for = "number" class = "form-label">Phone Number</label>
+            <input type = "number" class = "form-control" id = "number" name = "phone" placeholder = "123456789">
+        </div>
+
+        <div class = "mb-3">
+            <label for = "date" class = "form-label">Date Time</label>
+            <input type = "datetime-local" class = "form-control" id = "date" name = "date">
+        </div>
+
+        <div class = "mb-3">
+            <select name = "service" class = "form-select">
+                <option>--Select Service--</option>
+                {% for service in services %}
+                <option value = "{{service['serviceid']}}">{{service['name']}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class = "mb-3">
+            <button type = "submit">Book Now</button>
+        </div>
+
+
+    </form>
+</div>
+{% endblock %}

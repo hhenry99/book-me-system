@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Manage Service
+{% endblock %}
+
+{% block body %}
+<h1><a href = "/">Home</a></h1>
+<h1>Add Service</h1>
+<form action = "/add" method = "POST">
+    <input type = "text" name = "name" placeholder = "Service Name">
+    <button type = "submit">Add</button>
+</form>
+
+<hr>
+<h1>Current Service</h1>
+<table>
+{% for row in rows %}
+<tr>
+    <td>{{row['name']}}</td>
+    <td></td>
+    <td>
+        <form action = "/del-service" method = "POST">
+            <input type = "hidden" name = "id" value = "{{row['serviceid']}}">
+            <button type = "submit">X</button>
+        </form>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

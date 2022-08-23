@@ -1,0 +1,21 @@
+body{
+    background: orange;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-radius: 10px;
+    background: white;
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 25px;
+    padding: 10px;
+}
+
+.wrapper h1{
+    font-size: 25px;
+    text-align: center;
+}
+

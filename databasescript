@@ -1,0 +1,21 @@
+create table user(
+    userid  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    username varchar(100) not null unique,
+    password varchar(100) not null
+);
+
+create table appointment(
+    appid integer primary key autoincrement not null,
+    serviceid integer not null,
+    name varchar(200) not null,
+    email varchar(200) not null,
+    phone varchar(200) not null,
+    timedate DATETIME not null,
+    status integer not null default 0,
+    FOREIGN KEY (serviceid) REFERENCES service(serviceid)
+);
+
+create table service(
+    serviceid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name varchar(100) not null
+)
